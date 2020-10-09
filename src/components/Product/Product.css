@@ -13,7 +13,7 @@
 margin-left: 5px;
 }
 .main-button{
-background-color: rgba(90, 185, 209, 0.623);
+background-color: rgba(81, 198, 228, 0.137);
 border-radius: 10px;
 width: 150px;
 height: 30px;
@@ -22,14 +22,14 @@ box-shadow: 1px 1px 1px 1px rgb(109, 109, 96);
 
 }
 .main-button:hover{
-    background-color: indianred;
+    background-color: rgb(241, 182, 182);
     border-radius: 20px;
     cursor: pointer;
     border: none;
 }
 .main-button:focus{
     color: white ;
-    background-color: black;
+    background-color: rgb(175, 216, 62);
     border: none;
 
 }
