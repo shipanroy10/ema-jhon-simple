@@ -40,6 +40,7 @@ const signedInUser = {
   photo : photoURL,
   email : email
 };
+fireToken()
 setUser(signedInUser)
 setLoggedInUser(signedInUser)
 history.replace(from);
@@ -154,6 +155,14 @@ const updateUserName = name =>{
   });
 }
 document.title = 'Login';
+const fireToken = ()=>{
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+    sessionStorage.setItem('token',idToken)
+ 
+  }).catch(function(error) {
+    // Handle error
+  });
+}
   return (
     <div style={{textAlign : 'center'}}>
       { user.isSignedIn ?

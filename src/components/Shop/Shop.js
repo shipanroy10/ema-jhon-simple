@@ -13,14 +13,15 @@ const Shop = () => {
 
  const [products,setProducts] = useState([])
  const [cart,setCart] = useState([])
+ const [search,setSearch]= useState('');
 
  useEffect(()=>{
-fetch('https://tranquil-eyrie-60041.herokuapp.com/products')
+fetch('https://tranquil-eyrie-60041.herokuapp.com/products?search='+search)
 .then(res=>res.json())
 .then(data=>setProducts(data))
 
 
- },[])
+ },[search])
 
             useEffect(()=>{
             const savedCart = getDatabaseCart();
@@ -61,31 +62,38 @@ fetch('https://tranquil-eyrie-60041.herokuapp.com/products')
      
  }
  document.title = 'Shop'
+ const handleSearch = event =>{
+    setSearch(event.target.value)
+ }
     return (
-        <div className="shop-container">
-          
-        <div className="product-container">
-       {
-           products.length === 0 && <CircularProgress />
-       }
-             {products.map(pd=><Product product={pd}
-             key={pd.key}
-                    showAddToCart={true}
-                handleAddProduct={handleAddProduct}
+        <div className="container">
+            <div className="shop-container">
+        
+          <div className="product-container">
+          <input type="text" onBlur={handleSearch} placeholder="product-search"/>
 
-             >
-              
-             </Product>)}
-          
-        </div>
-            <div className="cart-container">
-               <Cart cart={cart} >
-
-               <Link to="/review"> <button className="main-button">Review Order</button></Link>
-
-
-               </Cart>
-            </div>
+         {
+             products.length === 0 && <CircularProgress />
+         }
+               {products.map(pd=><Product product={pd}
+               key={pd.key}
+                      showAddToCart={true}
+                  handleAddProduct={handleAddProduct}
+  
+               >
+                
+               </Product>)}
+            
+          </div>
+              <div className="cart-container">
+                 <Cart cart={cart} >
+  
+                 <Link to="/review"> <button className="main-button">Review Order</button></Link>
+  
+  
+                 </Cart>
+              </div>
+          </div>
         </div>
     );
 };

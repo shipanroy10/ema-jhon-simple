@@ -1,32 +1,46 @@
 import React, { useContext } from 'react';
+import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { userContext } from '../../App';
 import { getDatabaseCart, processOrder } from '../../utilities/databaseManager';
+import ProcessPayment from '../ProcessPayment/ProcessPayment';
 import './Shipment.css'
 const Shipment = () => {
     const { register, handleSubmit, watch, errors } = useForm();
-    const [loggedInUser,setLoggedInUser] = useContext(userContext)
+    const [loggedInUser,setLoggedInUser] = useContext(userContext);
+    const [shipmentData,setShipmentData]= useState(null);
   const onSubmit = data => {
-    
-    const savedCart = getDatabaseCart();
-    const orderDetails = {...loggedInUser,products:savedCart,shipment:data,time:new Date()}
+    setShipmentData(data)
+   
+};
+const handlePaymentSuccess = paymentId =>{
+  const savedCart = getDatabaseCart();
+  const orderDetails = {...loggedInUser,
+    products:savedCart,
+    paymentId,
+    shipment:shipmentData,
+    time:new Date()}
 fetch('https://tranquil-eyrie-60041.herokuapp.com/addOrder',{
-  method:'POST',
-  headers:{'Content-Type':'application/json'},
-  body:JSON.stringify(orderDetails)
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify(orderDetails)
 }).then(res=>res.json())
 .then(data=>{
-  if(data){
-    processOrder()
-    alert('your order is successful')
-  }
+if(data){
+  processOrder()
+  alert('your order is successful')
+}
 })
-};
+}
 
   console.log(watch("example")); // watch input value by passing the name of it
 
   return (
-  
+ <div className="container">
+ <div className="row">
+    <div style={{display: shipmentData ? 'none' : 'block'}}className="col-md-6">
+
+
     <form className="ship-form" onSubmit={handleSubmit(onSubmit)}>
  
 
@@ -44,6 +58,14 @@ fetch('https://tranquil-eyrie-60041.herokuapp.com/addOrder',{
       
       <input type="submit" />
     </form>
+
+    </div>
+    <div style={{display: shipmentData ? 'block' : 'none'}} className="col-md-6">
+
+      <ProcessPayment handlePayment={handlePaymentSuccess}></ProcessPayment>
+    </div>
+  </div>
+ </div>
   );
 };
 
